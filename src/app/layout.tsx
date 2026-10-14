@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
+import { Archivo, Archivo_Narrow, IBM_Plex_Mono } from 'next/font/google'
 import { SITE_INFO } from '@/lib/constants'
 import './globals.css'
+
+const archivo = Archivo({ subsets: ['latin'], variable: '--font-archivo' })
+const archivoNarrow = Archivo_Narrow({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-archivo-narrow' })
+const plexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono' })
 
 const title = `${SITE_INFO.name} — ${SITE_INFO.role}`
 
@@ -26,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="fr" className="scroll-smooth">
-      <body>{children}</body>
+    <html lang="fr" className={`scroll-smooth ${archivo.variable} ${archivoNarrow.variable} ${plexMono.variable}`}>
+      <body className="bg-ink text-paper font-sans antialiased">{children}</body>
     </html>
   )
 }

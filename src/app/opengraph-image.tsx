@@ -15,18 +15,22 @@ export default function OpengraphImage() {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          padding: 80,
-          background: 'linear-gradient(135deg, #000000 0%, #1C2331 100%)',
-          color: 'white',
+          justifyContent: 'space-between',
+          padding: 72,
+          background: '#0b0b0b',
+          color: '#f2f2ef',
         }}
       >
-        <div style={{ fontSize: 32, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: 4 }}>
-          {SITE_INFO.role}
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 24, color: '#7d7d78' }}>
+          <span>SÉQUENCE — PORTFOLIO</span>
+          <span style={{ color: '#ff4a1c' }}>● REC</span>
         </div>
-        <div style={{ fontSize: 96, fontWeight: 700, marginTop: 16 }}>{SITE_INFO.name}</div>
-        <div style={{ fontSize: 36, color: '#d1d5db', marginTop: 24, maxWidth: 900 }}>
-          Interviews, esport et contenus réseaux sociaux
+        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 120, fontWeight: 700, lineHeight: 0.9, textTransform: 'uppercase' }}>
+          <span>{SITE_INFO.name}</span>
+          <span style={{ color: '#7d7d78' }}>{SITE_INFO.role}</span>
+        </div>
+        <div style={{ display: 'flex', height: 6, background: '#262626', position: 'relative' }}>
+          <div style={{ width: '62%', height: 6, background: '#ff4a1c' }} />
         </div>
       </div>
     ),
