@@ -10,6 +10,8 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Composants shadcn/ui générés automatiquement
+  { ignores: ["src/components/ui/**"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 

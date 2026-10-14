@@ -1,39 +1,18 @@
-export const getVideoId = (url: string): string => {
-  // YouTube
-  const youtubeMatch = url.match(
-    /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=))([^/&?]{10,12})/,
-  )
-  if (youtubeMatch) return youtubeMatch[1]
+import type { Video } from "@/data/videos"
 
-  // Instagram
-  const instagramMatch = url.match(/instagram\.com\/(?:p|reel)\/([^/?]+)/)
-  if (instagramMatch) return instagramMatch[1]
+export type ThumbnailQuality = "maxresdefault" | "hqdefault"
 
-  return ""
-}
+// maxresdefault n'existe pas pour toutes les vidéos : prévoir hqdefault en repli (toujours disponible)
+export const getThumbnailUrl = (youtubeId: string, quality: ThumbnailQuality = "maxresdefault"): string =>
+  `https://i.ytimg.com/vi/${youtubeId}/${quality}.jpg`
 
-export const getThumbnailUrl = (videoUrl: string): string => {
-  const videoId = getVideoId(videoUrl)
+export const getEmbedUrl = (youtubeId: string): string => `https://www.youtube.com/embed/${youtubeId}`
 
-  if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
-    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-  }
+export const getWatchUrl = (video: Video): string =>
+  video.format === "short"
+    ? `https://www.youtube.com/shorts/${video.youtubeId}`
+    : `https://www.youtube.com/watch?v=${video.youtubeId}`
 
-  // Pour Instagram, on utilise une image par défaut
-  return "/placeholder.svg?height=720&width=1280"
-}
-
-export const getEmbedUrl = (videoUrl: string): string => {
-  const videoId = getVideoId(videoUrl)
-
-  if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
-    return `https://www.youtube.com/embed/${videoId}`
-  }
-
-  if (videoUrl.includes("instagram.com")) {
-    return `https://www.instagram.com/p/${videoId}/embed`
-  }
-
-  return videoUrl
-}
-
+// "1:03:34" ou "7:54" -> secondes
+export const durationToSeconds = (duration: string): number =>
+  duration.split(":").reduce((total, part) => total * 60 + Number(part), 0)
