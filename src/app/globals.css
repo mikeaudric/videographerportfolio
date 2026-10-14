@@ -5,17 +5,28 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-archivo);
+  --font-cond: var(--font-archivo-narrow);
+  --font-mono: var(--font-plex-mono);
+
+  /* DA « Planche × Timeline » */
+  --color-ink: #0b0b0b;
+  --color-panel: #141414;
+  --color-paper: #f2f2ef;
+  --color-mute: #7d7d78;
+  --color-line: #262626;
+  --color-hot: #ff4a1c;
+  --color-amber: #d7b25a;
+  --color-wave: #5fbf8a;
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: #0b0b0b;
+  --foreground: #f2f2ef;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover: #141414;
+  --popover-foreground: #f2f2ef;
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
@@ -26,9 +37,9 @@
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #262626;
+  --input: #262626;
+  --ring: #ff4a1c;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -126,4 +137,34 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Perforations de pellicule */
+.film-perfs {
+  height: 12px;
+  background: radial-gradient(circle, var(--color-ink) 3px, transparent 3.5px) 0 0 / 20px 12px repeat-x;
+}
+
+/* Forme d'onde de la piste audio */
+.waveform::before {
+  content: "";
+  position: absolute;
+  inset: 5px 3px;
+  background: repeating-linear-gradient(90deg, var(--color-wave) 0 2px, transparent 2px 4px);
+  opacity: 0.7;
+  mask: linear-gradient(transparent 15%, #000 50%, transparent 85%);
+}
+
+/* Tête de lecture */
+.playhead::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -6px;
+  border: 7px solid transparent;
+  border-top: 9px solid var(--color-hot);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; scroll-behavior: auto !important; }
 }
