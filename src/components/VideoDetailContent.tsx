@@ -2,7 +2,8 @@
 
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getEmbedUrl } from "@/lib/video-utils"
+import type { Video } from "@/data/videos"
+import { getEmbedUrl, getWatchUrl } from "@/lib/video-utils"
 import VideoCard from "./VideoCard"
 import {
   Carousel,
@@ -12,18 +13,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
-interface Video {
-  id: number
-  title: string
-  description: string
-  videoUrl: string
-  duration: string
-  type: "youtube" | "instagram"
-}
-
 interface VideoDetailContentProps {
   video: Video
   onClose: () => void
+  onSelect?: (video: Video) => void
   relatedVideos: Video[]
   variant: "dialog" | "modal"
   className?: string
@@ -32,17 +25,18 @@ interface VideoDetailContentProps {
 export default function VideoDetailContent({ 
   video, 
   onClose, 
+  onSelect,
   relatedVideos,
   variant,
   className 
 }: VideoDetailContentProps) {
-  const isInstagram = video.type === "instagram"
+  const isShort = video.format === "short"
   const filteredRelatedVideos = relatedVideos
-    .filter((v) => v.type === video.type && v.id !== video.id)
+    .filter((v) => v.format === video.format && v.youtubeId !== video.youtubeId)
     .slice(0, 6)
 
   return (
-    <div className={cn("w-full px-10", className)}>
+    <div className={cn("w-full px-4 md:px-10", className)}>
       {/* Header avec bouton de fermeture */}
       <div className={cn(
         "flex items-center justify-end",
@@ -56,7 +50,7 @@ export default function VideoDetailContent({
           onClick={onClose}
           className={cn(
             variant === "dialog" 
-              ? "rounded-full p-2 bg-blue-600 hover:bg-blue-700 transition-colors w-8 h-8 flex items-center justify-center shadow-lg hover:-translate-y-2"
+              ? "rounded-full p-2 bg-blue-600 hover:bg-red-600 transition-colors w-8 h-8 flex items-center justify-center shadow-lg hover:-translate-y-2"
               : "rounded-full bg-white/10 p-2 hover:bg-white/20 transition-colors"
           )}
         >
@@ -68,12 +62,12 @@ export default function VideoDetailContent({
         {/* Video Container */}
         <div className={cn(
           "relative bg-black rounded-lg overflow-hidden",
-          isInstagram ? "aspect-[9/16]" : "aspect-video",
-          "md:w-[55%]" // Cette classe contrôle la largeur du bloc vidéo
+          isShort ? "aspect-[9/16] w-full max-w-[360px] mx-auto md:mx-0 md:w-[30%]" : "aspect-video md:w-[55%]",
+          "" // Cette classe contrôle la largeur du bloc vidéo
         )}>
           <iframe
             className="absolute inset-0 w-full h-full"// Ces classes contrôlent les dimensions de l'iframe
-            src={getEmbedUrl(video.videoUrl)}
+            src={getEmbedUrl(video.youtubeId)}
             allow="autoplay; encrypted-media"
             allowFullScreen
             title={video.title}
@@ -82,7 +76,8 @@ export default function VideoDetailContent({
 
         {/* Description Container */}
         <div className={cn(
-          "md:w-[40%] flex items-center justify-center md:ml-4" // [] Cette classe contrôle la largeur du bloc description md:ml-4
+          isShort ? "md:flex-1" : "md:w-[40%]",
+          "flex items-center justify-center md:ml-4" // [] Cette classe contrôle la largeur du bloc description md:ml-4
         )}>
           <div className="relative w-full h-[80%] space-y-4 bg-white/5 p-5 rounded-lg backdrop-blur-md border border-white/10">
             <div className="absolute -inset-1 blur-lg bg-blue-600/20 rounded-lg" />
@@ -90,7 +85,9 @@ export default function VideoDetailContent({
             <div className="flex items-center gap-2 text-white/95 relative">
               <span className="text-sm">{video.duration}</span>
               <span>•</span>
-              <span className="text-sm">{video.type === 'youtube' ? 'YouTube' : 'Instagram'}</span>
+              <a href={getWatchUrl(video)} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline">
+                Voir sur YouTube
+              </a>
             </div>
             <div className="overflow-y-auto max-h-[calc(100%-7rem)] relative">
               <p className="text-white/80 leading-relaxed">{video.description}</p>
@@ -137,14 +134,13 @@ export default function VideoDetailContent({
                 <CarouselContent className="-ml-3"> {/* Ajustement de la marge négative */}
                   {filteredRelatedVideos.map((relatedVideo) => (
                     <CarouselItem
-                      key={relatedVideo.id}
-                      className="basis-[20%] pl- h-auto" // Ajustement de la taille et de l'espacement
+                      key={relatedVideo.youtubeId}
+                      className={cn("pl-3 h-auto", isShort ? "basis-1/3 md:basis-[15%]" : "basis-2/3 md:basis-[25%]")} // Ajustement de la taille et de l'espacement
                     >
                       <div className="scale-100"> {/* Réduction de la taille des cartes de 10% */}
                         <VideoCard
                           video={relatedVideo}
-                          isReel={relatedVideo.type === "instagram"}
-                          onReadMore={() => onClose()}
+                          onReadMore={onSelect}
                           isCarousel={true}
                         />
                       </div>

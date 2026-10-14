@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+requirements: 
+npm install @radix-ui/react-dialog
+npm install class-variance-authority
+npm install embla-carousel-react
+npm install lucide-react    
+npm install tailwind-merge 
+npm install next-themes 
+npx shadcn@latest add button
+npm install date-fns@2.28.0   
+npm install react-day-picker@latest
+
+in public/icons (have to be created) download those file to have the right files for instagram et X logo :
+https://about.meta.com/brand/resources/instagram/instagram-brand/
+https://about.x.com/en/who-we-are/brand-toolkit
